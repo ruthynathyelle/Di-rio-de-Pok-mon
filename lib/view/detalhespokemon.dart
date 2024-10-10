@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:diariodepokemon/model/pokemon_model.dart';
 
-class DetalhesPokemonPage extends StatelessWidget {
+class DetalhesPokemon extends StatelessWidget {
   final Pokemon pokemon;
 
-  const DetalhesPokemonPage({Key? key, required this.pokemon}) : super(key: key);
+  const DetalhesPokemon({Key? key, required this.pokemon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(pokemon.name,
-        style: TextStyle (
-
-        ),),
-        
+        title: Text(
+          pokemon.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -27,8 +29,8 @@ class DetalhesPokemonPage extends StatelessWidget {
                   scale: 1.0,
                   child: Image.network(
                     pokemon.imageUrl,
-                    height: 250, 
-                    fit: BoxFit.cover, 
+                    height: 250,
+                    fit: BoxFit.cover,
                     loadingBuilder: (context, child, progress) {
                       if (progress == null) {
                         return child;
@@ -43,14 +45,18 @@ class DetalhesPokemonPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              Text(
-                pokemon.name,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              Center(
+                child: Text(
+                  '#${pokemon.id} ${pokemon.name}',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 16),
+              Divider(color: Colors.grey),
+              SizedBox(height: 16),
               Text(
                 'Nome: ${pokemon.name}',
                 style: TextStyle(
@@ -58,12 +64,18 @@ class DetalhesPokemonPage extends StatelessWidget {
                   color: Colors.grey[700],
                 ),
               ),
-            ]
-                   ),
-                  ),
-
-                )
-              );
-      
+              SizedBox(height: 8),
+              Text(
+                'Número na Pokédex: ${pokemon.id}',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

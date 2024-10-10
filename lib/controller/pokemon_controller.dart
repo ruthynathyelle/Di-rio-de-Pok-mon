@@ -1,31 +1,32 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:diariodepokemon/model/pokemon_model.dart';
 import 'package:diariodepokemon/service/pokemon_service.dart';
 
-class PokemonController extends ChangeNotifier {
+class PokemonController extends GetxController {
   final PokemonService _pokemonService = PokemonService();
-  List<Pokemon>? _pokemons;
-  String? _mensagemErro;
-  bool _estaCarregando = false;
+  
+  var pokemons = <Pokemon>[].obs; // Lista reativa de Pokémons
+  var mensagemErro = ''.obs; // Mensagem de erro reativa
+  var estaCarregando = false.obs; // Estado de carregamento reativo
 
-  List<Pokemon>? get pokemon => _pokemons;
-  String? get mensagemErro => _mensagemErro;
-  bool get estaCarregando => _estaCarregando;
+  @override
+  void onInit() {
+    super.onInit();
+    carregarPokemon(); // Carregar pokémons ao inicializar o controller
+  }
 
   Future<void> carregarPokemon() async {
-    _estaCarregando = true;
-    notifyListeners();
+    estaCarregando.value = true;
 
     try {
-      _pokemons = await _pokemonService.obterPokemon();
-      _mensagemErro = null;
+      var resultado = await _pokemonService.obterPokemon();
+      pokemons.assignAll(resultado); // Atualiza a lista de Pokémons
+      mensagemErro.value = ''; // Limpa a mensagem de erro
     } catch (e) {
-      _mensagemErro = 'Erro: $e';
-      _pokemons = null;
+      mensagemErro.value = 'Erro ao carregar pokémons: $e';
+      pokemons.clear(); // Limpa a lista em caso de erro
     } finally {
-      _estaCarregando = false;
-      notifyListeners();
+      estaCarregando.value = false;
     }
   }
 }
